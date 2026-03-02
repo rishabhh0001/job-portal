@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 lg:px-16 py-10">
+    <div class="mb-8">
+        <h1 class="text-2xl font-black">Admin Panel</h1>
+        <p class="text-slate-500 text-sm mt-1">Platform overview and management</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+        <div class="bg-surface border border-border rounded-xl p-5">
+            <span class="text-3xl font-black text-primary block">{{ users|length }}</span>
+            <span class="text-xs text-slate-500 uppercase tracking-wider">Total Users</span>
+        </div>
+        <div class="bg-surface border border-border rounded-xl p-5">
+            <span class="text-3xl font-black text-primary block">{{ jobs|length }}</span>
+            <span class="text-xs text-slate-500 uppercase tracking-wider">Total Jobs</span>
+        </div>
+        <a href="{{ url_for('admin_applications') }}"
+            class="bg-surface border border-border rounded-xl p-5 block btn-hover">
+            <span class="text-3xl font-black text-primary block">{{ apps|length }}</span>
+            <span class="text-xs text-slate-500 uppercase tracking-wider flex items-center justify-between">
+                Total Applications
+                <span class="material-symbols-outlined text-sm">open_in_new</span>
+            </span>
+        </a>
+
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-surface border border-border rounded-xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-border">
+                <h2 class="font-bold text-sm">Recent Users</h2>
+            </div>
+            <table class="w-full text-sm">
+                <thead class="bg-bg-dark text-slate-500 text-xs uppercase tracking-wider">
+                    <tr>
+                        <th class="text-left px-6 py-3">User</th>
+                        <th class="text-left px-6 py-3">Role</th>
+                        <th class="text-left px-6 py-3">Status</th>
+                        <th class="text-right px-6 py-3 tracking-widest">Actions</th>
+                    </tr>
+
+                </thead>
+                <tbody class="divide-y divide-border">
+                    {% for user in users %}
+                    <tr class="hover:bg-bg-dark/30 transition-colors">
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-slate-100">{{ user.username }}</div>
+                            <div class="text-[10px] text-slate-500 font-mono">{{ user.email }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            {% if user.id != current_user.id %}
+                            <form action="{{ url_for('admin_change_user_role', user_id=user.id) }}" method="POST"
+                                class="inline-block">
+                                <select name="role" onchange="this.form.submit()" class="bg-bg-dark border border-border rounded px-2 py-0.5 text-[10px] font-bold uppercase focus:ring-1 focus:ring-primary outline-none
+                                    {% if user.role == 'admin' %}text-purple-400
+                                    {% elif user.role == 'employer' %}text-blue-400
+                                    {% else %}text-slate-400{% endif %}">
+                                    <option value="seeker" {% if user.role=='seeker' %}selected{% endif %}>Seeker
+                                    </option>
+                                    <option value="employer" {% if user.role=='employer' %}selected{% endif %}>Employer
+                                    </option>
+                                    <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Admin</option>
+                                </select>
+                            </form>
+                            {% else %}
+                            <span
+                                class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-purple-500/15 text-purple-400">
+                                {{ user.role }}
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                                {% if user.is_active %}bg-emerald-500/15 text-emerald-400
+                                {% else %}bg-red-500/15 text-red-400{% endif %}">
+                                {{ 'Active' if user.is_active else 'Suspended' }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right space-x-2">
+                            {% if user.id != current_user.id %}
+                            <form action="{{ url_for('admin_toggle_user_status', user_id=user.id) }}" method="POST"
+                                class="inline">
+                                <button type="submit" class="text-xs font-bold px-3 py-1 rounded transition-all btn-hover
+                                    {% if user.is_active %}bg-red-500/10 text-red-500 hover:bg-red-500/20
+                                    {% else %}bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20{% endif %}">
+                                    {{ 'Suspend' if user.is_active else 'Activate' }}
+                                </button>
+                            </form>
+                            <form action="{{ url_for('admin_delete_user', user_id=user.id) }}" method="POST"
+                                class="inline" onsubmit="return confirm('Account deletion is permanent. Continue?');">
+                                <button type="submit"
+                                    class="text-slate-600 hover:text-red-500 transition-colors btn-hover">
+                                    <span class="material-symbols-outlined text-lg">delete</span>
+                                </button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bg-surface border border-border rounded-xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-border">
+                <h2 class="font-bold text-sm">Recent Jobs</h2>
+            </div>
+            <table class="w-full text-sm">
+                <thead class="bg-bg-dark text-slate-500 text-xs uppercase tracking-wider">
+                    <tr>
+                        <th class="text-left px-6 py-3">Job Listing</th>
+                        <th class="text-left px-6 py-3">Status</th>
+                        <th class="text-center px-6 py-3">Apps</th>
+                        <th class="text-right px-6 py-3 tracking-widest">Actions</th>
+                    </tr>
+
+                </thead>
+                <tbody class="divide-y divide-border">
+                    {% for job in jobs %}
+                    <tr class="hover:bg-bg-dark/30 transition-colors">
+                        <td class="px-6 py-4">
+                            <a href="{{ url_for('job_detail', job_id=job.id) }}"
+                                class="font-medium text-slate-100 hover:text-primary transition-colors">{{ job.title
+                                }}</a>
+                            <div class="text-[10px] text-slate-500 uppercase">{{ job.employer.company_name or
+                                job.employer.username }}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                                {% if job.is_active %}bg-emerald-500/15 text-emerald-400
+                                {% else %}bg-amber-500/15 text-amber-400{% endif %}">
+                                {{ 'Live' if job.is_active else 'Deactivated' }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-slate-400 font-mono text-center">{{ job.applications|length }}</td>
+                        <td class="px-6 py-4 text-right space-x-2">
+                            <form action="{{ url_for('admin_toggle_job_status', job_id=job.id) }}" method="POST"
+                                class="inline">
+                                <button type="submit" class="text-xs font-bold px-3 py-1 rounded transition-all btn-hover
+                                    {% if job.is_active %}bg-amber-500/10 text-amber-500 hover:bg-amber-500/20
+                                    {% else %}bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20{% endif %}">
+                                    {{ 'Deactivate' if job.is_active else 'Approve' }}
+                                </button>
+                            </form>
+                            <form action="{{ url_for('admin_delete_job', job_id=job.id) }}" method="POST" class="inline"
+                                onsubmit="return confirm('Delete job listing permanently?');">
+                                <button type="submit"
+                                    class="text-slate-600 hover:text-red-500 transition-colors btn-hover">
+                                    <span class="material-symbols-outlined text-lg">delete</span>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

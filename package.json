@@ -1,0 +1,20 @@
+{
+  "name": "job-portal",
+  "version": "1.0.0",
+  "description": "A full-stack job portal built with Flask, inspired by the Naukri.com dark mode aesthetic. Supports three roles: job seekers, employers, and admins.",
+  "main": "tailwind.config.js",
+  "scripts": {
+    "build": "tailwindcss -i ./static/css/input.css -o ./static/css/main.css --minify",
+    "dev": "tailwindcss -i ./static/css/input.css -o ./static/css/main.css --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.1",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.11",
+    "tailwindcss": "^4.2.1"
+  }
+}

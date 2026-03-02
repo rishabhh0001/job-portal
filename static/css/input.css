@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+    --color-primary: #2d7fd2;
+    --color-cta: #FF6B35;
+    --color-bg-dark: #080E18;
+    --color-surface: #0D1721;
+    --color-border: #1e293b;
+
+    --font-sans: "Inter", "sans-serif";
+}
+
+@layer components {
+    .btn-hover {
+        @apply transition-all duration-200 active:scale-[0.97] hover:brightness-110 cursor-pointer;
+    }
+
+    .nav-link {
+        @apply transition-all duration-200 hover:text-white active:scale-90 cursor-pointer;
+    }
+
+    .footer-link {
+        @apply transition-all duration-200 hover:text-primary hover:translate-x-1 inline-block cursor-pointer;
+    }
+
+    .card-hover {
+        @apply transition-all duration-300 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 active:scale-[0.99] cursor-pointer hover:-translate-y-1;
+    }
+}

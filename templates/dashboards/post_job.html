@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Post a Job{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-6 lg:px-16 py-10">
+    <div class="mb-8">
+        <h1 class="text-2xl font-black">Post a New Job</h1>
+        <p class="text-slate-500 text-sm mt-1">Fill in the details and start receiving applications</p>
+    </div>
+
+    <div class="bg-surface border border-border rounded-2xl p-8">
+        <form action="{{ url_for('post_job') }}" method="POST" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Job Title
+                        *</label>
+                    <input name="title" type="text" required placeholder="e.g. Senior Frontend Engineer"
+                        class="w-full bg-bg-dark border border-border rounded-lg px-4 py-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-primary" />
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Location
+                        *</label>
+                    <input name="location" type="text" required placeholder="e.g. Remote, Bangalore"
+                        class="w-full bg-bg-dark border border-border rounded-lg px-4 py-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-primary" />
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Salary
+                        Range</label>
+                    <input name="salary" type="text" placeholder="e.g. ₹20L - 35L PA"
+                        class="w-full bg-bg-dark border border-border rounded-lg px-4 py-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-primary" />
+                </div>
+
+                <div>
+                    <label
+                        class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Category</label>
+                    <select name="category"
+                        class="w-full bg-bg-dark border border-border rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary appearance-none">
+                        <option value="">Select a category</option>
+                        {% for cat in ['Engineering', 'Design', 'Marketing', 'Finance', 'Data Science', 'Customer
+                        Success', 'Cybersecurity', 'Operations', 'Other'] %}
+                        <option value="{{ cat }}">{{ cat }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Job
+                        Type</label>
+                    <select name="job_type"
+                        class="w-full bg-bg-dark border border-border rounded-lg px-4 py-3 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-primary appearance-none">
+                        {% for t in ['Full Time', 'Part Time', 'Contract', 'Remote'] %}
+                        <option value="{{ t }}">{{ t }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Experience
+                        Required</label>
+                    <input name="experience" type="text" placeholder="e.g. 3-5 years"
+                        class="w-full bg-bg-dark border border-border rounded-lg px-4 py-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-primary" />
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Required
+                        Skills</label>
+                    <input name="skills" type="text" placeholder="e.g. React, Node.js, PostgreSQL (comma separated)"
+                        class="w-full bg-bg-dark border border-border rounded-lg px-4 py-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-primary" />
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Job
+                        Description *</label>
+                    <textarea name="description" rows="8" required
+                        placeholder="Describe the role, responsibilities, and what makes this opportunity unique..."
+                        class="w-full bg-bg-dark border border-border rounded-lg px-4 py-3 text-sm text-slate-100 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-primary resize-y"></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 pt-2">
+                <a href="{{ url_for('employer_dashboard') }}"
+                    class="text-sm font-semibold border border-slate-700 text-slate-300 px-6 py-2.5 rounded-lg hover:bg-slate-800 transition-colors">Cancel</a>
+                <button type="submit"
+                    class="text-sm font-bold bg-primary text-white px-8 py-2.5 rounded-lg hover:bg-primary/90 transition-all shadow-lg shadow-primary/20">Post
+                    Job</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

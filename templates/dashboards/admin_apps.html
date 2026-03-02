@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}All Applications - Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 lg:px-16 py-10">
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-2xl font-black">Platform Applications</h1>
+            <p class="text-slate-500 text-sm mt-1">All job applications across the platform</p>
+        </div>
+        <a href="{{ url_for('admin_dashboard') }}"
+            class="text-primary text-sm font-bold flex items-center gap-1 hover:underline">
+            <span class="material-symbols-outlined text-sm">arrow_back</span> Back to Dashboard
+        </a>
+    </div>
+
+    <div class="bg-surface border border-border rounded-xl overflow-hidden shadow-sm">
+        <table class="w-full text-sm">
+            <thead class="bg-bg-dark text-slate-500 text-xs uppercase tracking-wider">
+                <tr>
+                    <th class="text-left px-6 py-4">Applied Date</th>
+                    <th class="text-left px-6 py-4">Candidate</th>
+                    <th class="text-left px-6 py-4">Job Title</th>
+                    <th class="text-left px-6 py-4">Company</th>
+                    <th class="text-left px-6 py-4">Status</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+                {% for app, job, seeker in applications %}
+                <tr class="hover:bg-bg-dark/30 transition-colors">
+                    <td class="px-6 py-4 text-slate-500 font-mono text-xs">
+                        {{ app.applied_at.strftime('%b %d, %Y') }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="font-bold text-slate-200">{{ seeker.username }}</div>
+                        <div class="text-[10px] text-slate-500">{{ seeker.email }}</div>
+                    </td>
+                    <td class="px-6 py-4 font-medium">
+                        <a href="{{ url_for('job_detail', job_id=job.id) }}"
+                            class="hover:text-primary transition-colors">
+                            {{ job.title }}
+                        </a>
+                    </td>
+                    <td class="px-6 py-4 text-slate-400">
+                        {{ job.employer.company_name or job.employer.username }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase
+                            {% if app.status == 'Accepted' %}bg-emerald-500/15 text-emerald-400
+                            {% elif app.status == 'Rejected' %}bg-red-500/15 text-red-400
+                            {% elif app.status == 'Reviewing' %}bg-amber-500/15 text-amber-400
+                            {% else %}bg-slate-700 text-slate-400{% endif %}">
+                            {{ app.status }}
+                        </span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="px-6 py-12 text-center text-slate-500">
+                        No applications found on the platform yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

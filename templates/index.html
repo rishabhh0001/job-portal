@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Find Your Next Job{% endblock %}
+
+{% block content %}
+<section class="relative pt-20 pb-24 px-6 lg:px-16 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-transparent pointer-events-none">
+    </div>
+    <div class="max-w-4xl mx-auto text-center relative z-10">
+        <h1 class="text-5xl md:text-6xl font-black tracking-tight leading-tight mb-6">
+            Find Your Next<br>
+            <span class="text-primary">Opportunity</span>
+        </h1>
+        <p class="text-slate-400 text-lg mb-12 max-w-2xl mx-auto">
+            Browse thousands of roles from top companies. No spam, just real jobs.
+        </p>
+
+        <form action="{{ url_for('jobs') }}" method="GET"
+            class="bg-surface border border-border rounded-xl p-2 flex flex-col md:flex-row gap-2 shadow-2xl">
+            <div class="flex-1 flex items-center px-4 gap-3">
+                <span class="material-symbols-outlined text-slate-500 shrink-0">search</span>
+                <input name="q" value="{{ request.args.get('q', '') }}" type="text"
+                    placeholder="Job title, skill or company"
+                    class="w-full bg-transparent border-none focus:ring-0 text-slate-100 placeholder:text-slate-500 text-sm py-2" />
+            </div>
+            <div class="flex items-center px-4 gap-3 border-t md:border-t-0 md:border-l border-border">
+                <span class="material-symbols-outlined text-slate-500 shrink-0">location_on</span>
+                <input name="location" value="{{ request.args.get('location', '') }}" type="text"
+                    placeholder="City or Remote"
+                    class="bg-transparent border-none focus:ring-0 text-slate-100 placeholder:text-slate-500 text-sm py-2 w-36" />
+            </div>
+            <button type="submit"
+                class="bg-cta text-white font-bold px-8 py-3 rounded-lg transition-all text-sm whitespace-nowrap btn-hover shadow-lg shadow-cta/20">
+                Search Jobs
+            </button>
+
+        </form>
+    </div>
+</section>
+
+<section class="bg-surface/50 border-y border-border py-8">
+    <div class="max-w-6xl mx-auto px-6 grid grid-cols-3 gap-8 text-center">
+        <div>
+            <span class="text-primary font-mono text-3xl font-bold">150K+</span>
+            <p class="text-slate-500 text-xs uppercase tracking-widest font-semibold mt-1">Open Roles</p>
+        </div>
+        <div>
+            <span class="text-primary font-mono text-3xl font-bold">25K+</span>
+            <p class="text-slate-500 text-xs uppercase tracking-widest font-semibold mt-1">Companies Hiring</p>
+        </div>
+        <div>
+            <span class="text-primary font-mono text-3xl font-bold">2.4M+</span>
+            <p class="text-slate-500 text-xs uppercase tracking-widest font-semibold mt-1">Applicants Placed</p>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 px-6 lg:px-16 max-w-7xl mx-auto">
+    <div class="flex items-end justify-between mb-10">
+        <div>
+            <h2 class="text-3xl font-extrabold mb-1">Browse by Category</h2>
+            <p class="text-slate-500 text-sm">Explore roles that fit your skills</p>
+        </div>
+        <a href="{{ url_for('jobs') }}"
+            class="text-primary text-sm font-semibold flex items-center gap-1 hover:underline">
+            View All <span class="material-symbols-outlined text-sm">arrow_forward</span>
+        </a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {% set categories = [
+        ('code', 'Engineering', '4.5k+ Jobs'),
+        ('brush', 'Design', '1.2k+ Jobs'),
+        ('analytics', 'Marketing', '800+ Jobs'),
+        ('payments', 'Finance', '2.1k+ Jobs'),
+        ('support_agent', 'Customer Success', '600+ Jobs'),
+        ('database', 'Data Science', '1.8k+ Jobs'),
+        ('shield', 'Cybersecurity', '450+ Jobs'),
+        ('hub', 'Operations', '1.1k+ Jobs'),
+        ] %}
+        {% for icon, name, count in categories %}
+        <a href="{{ url_for('jobs', category=name) }}"
+            class="bg-surface p-6 rounded-xl border border-border transition-all group block card-hover">
+            <span
+                class="material-symbols-outlined text-primary text-3xl mb-3 block group-hover:scale-110 transition-transform">{{
+                icon }}</span>
+            <h3 class="font-bold text-slate-200 text-sm">{{ name }}</h3>
+            <p class="text-slate-500 text-xs mt-0.5">{{ count }}</p>
+        </a>
+
+        {% endfor %}
+    </div>
+</section>
+
+<section class="bg-surface/30 py-20 px-6 lg:px-16">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-end justify-between mb-10">
+            <h2 class="text-3xl font-extrabold">Featured Jobs</h2>
+            <a href="{{ url_for('jobs') }}" class="text-primary text-sm font-semibold hover:underline">See all jobs</a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for job in featured_jobs %}
+            <div class="bg-surface border border-border p-6 rounded-2xl group flex flex-col card-hover">
+
+                <div class="flex items-start justify-between mb-4">
+                    <div
+                        class="size-11 rounded-lg flex items-center justify-center font-bold text-lg av-{{ job.id % 6 }}">
+                        {{ (job.employer.company_name or job.employer.username)[0]|upper }}
+                    </div>
+                    <span
+                        class="text-[10px] font-bold uppercase tracking-wider px-2 py-1 bg-slate-800 text-slate-400 rounded-full">{{
+                        job.job_type }}</span>
+                </div>
+                <h3 class="font-bold text-slate-100 group-hover:text-primary transition-colors mb-1 line-clamp-1">{{
+                    job.title }}</h3>
+                <p class="text-sm text-slate-400 mb-1">{{ job.employer.company_name or job.employer.username }}</p>
+                <div class="flex items-center gap-3 text-xs text-slate-500 mt-1 mb-4">
+                    <span class="flex items-center gap-1"><span
+                            class="material-symbols-outlined text-sm">location_on</span>{{ job.location }}</span>
+                    {% if job.salary %}
+                    <span class="flex items-center gap-1"><span
+                            class="material-symbols-outlined text-sm">payments</span>{{ job.salary }}</span>
+                    {% endif %}
+                </div>
+                <div class="mt-auto pt-4 border-t border-border">
+                    <a href="{{ url_for('job_detail', job_id=job.id) }}"
+                        class="block w-full text-center text-sm font-semibold border border-slate-700 py-2 rounded-lg btn-hover hover:border-primary hover:text-primary">
+                        View Details
+                    </a>
+
+                </div>
+            </div>
+            {% else %}
+            <div class="col-span-full text-center py-16 text-slate-500">No jobs posted yet. Check back soon!</div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% if not current_user.is_authenticated %}
+<section class="py-20 px-6 lg:px-16 text-center">
+    <div class="max-w-2xl mx-auto">
+        <h2 class="text-3xl font-extrabold mb-3">Ready to start hiring?</h2>
+        <p class="text-slate-400 mb-8">Post your first job for free and reach thousands of qualified candidates.</p>
+        <a href="{{ url_for('register') }}"
+            class="inline-block bg-cta text-white font-bold px-10 py-4 rounded-xl text-sm btn-hover shadow-lg shadow-cta/20">
+            Get Started as an Employer
+        </a>
+
+    </div>
+</section>
+{% endif %}
+{% endblock %}

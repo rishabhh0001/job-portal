@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-20">
+    <div class="mb-12">
+        <h1 class="text-3xl font-black mb-4">Privacy Policy</h1>
+        <p class="text-slate-500 text-sm">Last updated: March 2025</p>
+    </div>
+
+    <div class="prose prose-invert max-w-none space-y-8 text-slate-400">
+        <section>
+            <h2 class="text-xl font-bold text-white mb-4">1. Information We Collect</h2>
+            <p>
+                We collect information you provide directly to us, such as when you create an account, post a job, or
+                apply for a position. This includes your name, email address, password hash, and any profile or
+                job-related data you submit.
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-bold text-white mb-4">2. How We Use Your Information</h2>
+            <p>
+                We use the information we collect to operate and maintain JobPortal, including:
+            </p>
+            <ul class="list-disc pl-6 mt-4 space-y-2">
+                <li>Facilitating the job search and application process.</li>
+                <li>Allowing employers to manage listings and applicants.</li>
+                <li>Communicating with you about your account and platform updates.</li>
+                <li>Improving our services and user experience.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-bold text-white mb-4">3. Data Security</h2>
+            <p>
+                We take reasonable measures to protect your personal information from loss, theft, misuse, and
+                unauthorized access. This includes using hashed passwords and secure database configurations.
+            </p>
+        </section>
+
+        <section>
+            <h2 class="text-xl font-bold text-white mb-4">4. Sharing of Information</h2>
+            <p>
+                We do not sell your personal data. We share information only as necessary to facilitate the platform's
+                core functions (e.g., sharing a seeker's application data with the respective employer).
+            </p>
+        </section>
+
+        <section class="bg-surface border border-border rounded-xl p-8 mt-12">
+            <h2 class="text-lg font-bold text-white mb-2">Questions?</h2>
+            <p class="text-sm">
+                If you have any questions about this Privacy Policy, please contact us at support@jobportal.com.
+            </p>
+        </section>
+    </div>
+</div>
+{% endblock %}
